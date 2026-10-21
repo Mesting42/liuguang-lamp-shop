@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">流光灯铺品牌标志</title>
+  <desc id="desc">深绿底色上的拱形彩色玻璃灯窗，中央亮起一束暖金色光。</desc>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="14" fill="#263a31" stroke="#b58047" stroke-width="1.5"/>
+  <path d="M16 49V28a16 16 0 0 1 32 0v21Z" fill="#e9dfc9" stroke="#d6bd8d" stroke-width="1.5"/>
+  <path d="M20 29a12 12 0 0 1 10-11v12H20Z" fill="#e8b86f"/>
+  <path d="M34 18a12 12 0 0 1 10 11H34Z" fill="#dc8d7b"/>
+  <path d="M20 33h10v12H20z" fill="#88aa8a"/>
+  <path d="M34 33h10v12H34z" fill="#8eafc4"/>
+  <path d="M16 31h32M32 18v28" fill="none" stroke="#263a31" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="m32 24 3.5 7.5-3.5 7.5-3.5-7.5Z" fill="#f7d987" stroke="#8b6540" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M26 50h12m-8 4h4" fill="none" stroke="#d6bd8d" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32 8v3m-7 2 2 2m10-2-2 2" fill="none" stroke="#f0d499" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

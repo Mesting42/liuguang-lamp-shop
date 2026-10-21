@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>流光灯铺 · 消除动效开发验证</title>
+<style>
+  body{max-width:780px;margin:32px auto;padding:0 20px;background:#eee6d5;color:#364b3c;font:16px/1.7 system-ui}
+  h1{font-size:26px}p{color:#635b4b}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  button{padding:14px;border:1px solid #a38c69;background:#faf4e7;color:#354b3d;text-align:left;font:inherit;cursor:pointer}
+  button small{display:block;font-size:12px;color:#6c614e}label{display:inline-block;margin:0 18px 18px 0}
+</style>
+<h1>消除动效开发验证</h1>
+<p>请使用独立开发端口打开。此页会为当前端口写入专用测试存档，然后进入正式游戏界面；点击“继续修复”即可操作。它不会进入生产构建。</p>
+<label><input id="motion" type="checkbox">简化动画</label>
+<label><input id="flash" type="checkbox">降低闪光</label>
+<label>达标后余步 <input id="spare" type="number" min="0" max="31" value="12" style="width:55px"></label>
+<main id="cases"></main>
+<script type="module">
+import { COLORS, LEVELS } from "/src/levels.js";
+import { createRun, winBonus, goalKey } from "/src/engine.js";
+import { freshSave, writeSave } from "/src/save.js";
+
+const cases = [
+  ["win-bonus", "达标后的余步奖励", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["bonus-resume", "刷新后恢复奖励", "点击继续修复，直接进入奖励阶段"],
+  ["win-bonus-final", "最终关卡奖励与结局", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["match", "普通消除与连锁", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["cascade", "连续级联", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["invalid", "无效交换退回", "第 1 行第 1 列 → 第 1 行第 2 列"],
+  ["form-beam", "四连生成光束", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["form-bomb", "T 形生成晶石", "第 5 行第 3 列 → 第 4 行第 3 列"],
+  ["form-lens", "五连生成透镜", "第 3 行第 3 列 → 第 4 行第 3 列"],
+  ["beam-h", "横向光束触发", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["beam-v", "纵向光束触发", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["bomb", "灯芯晶石触发", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["lens", "虹彩透镜触发", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["beam+bomb", "光束与晶石组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["beam+beam", "双光束组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["lens+beam", "透镜与光束组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["lens+bomb", "透镜与晶石组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["bomb+bomb", "双晶石组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["lens+lens", "双透镜组合", "第 4 行第 4 列 → 第 4 行第 5 列"],
+  ["obstacles", "障碍清理与补位", "第 3 行第 3 列 → 第 4 行第 3 列"]
+];
+document.querySelector("#cases").innerHTML = cases.map(([key, label, move]) => `<button data-case="${key}">${label}<small>${move}</small></button>`).join("");
+document.querySelector("#cases").addEventListener("click", (event) => {
+  const key = event.target.closest("[data-case]")?.dataset.case;
+  if (!key) return;
+  const stage = key === "win-bonus-final" ? LEVELS[35] : LEVELS[0];
+  let state = createRun(stage, 5150);
+  const board = Array.from({ length: 8 }, (_, y) => Array.from({ length: 8 }, (_, x) => ({ tile: { color: COLORS[(x + y * 2) % COLORS.length], special: null, direction: null }, crate: 0, frost: 0, vine: 0, chain: 0 })));
+  if (["win-bonus", "win-bonus-final", "match", "cascade", "form-beam", "form-lens", "obstacles"].includes(key)) {
+    board[2][2].tile.color = "amber";
+    const row = key === "form-lens" ? ["amber", "amber", "coral", "amber", "amber", "jade"] : key === "form-beam" || key === "obstacles" ? ["amber", "amber", "coral", "amber", "jade"] : ["amber", "amber", "coral", "jade"];
+    row.forEach((color, x) => { board[3][x].tile.color = color; });
+    if (key === "cascade") {
+      board[2][1].tile.color = "coral";
+      board[2][3].tile.color = "jade";
+      board[3][3].tile.color = "coral";
+    }
+  } else if (key === "form-bomb") {
+    for (const [y, x] of [[1,2],[2,2],[3,1],[3,3],[4,2]]) board[y][x].tile.color = "amber";
+    board[3][2].tile.color = "coral";
+  } else if (key.includes("+")) {
+    const [first, second] = key.split("+");
+    board[3][3].tile.special = first;
+    board[3][3].tile.direction = "h";
+    board[3][4].tile.special = second;
+  } else if (!["invalid", "bonus-resume"].includes(key)) {
+    board[3][3].tile.special = key.startsWith("beam") ? "beam" : key;
+    board[3][3].tile.direction = key === "beam-v" ? "v" : "h";
+  }
+  if (key === "obstacles") {
+    board[3][1].chain = 1;
+    board[3][1].frost = 1;
+    board[3][0].vine = 1;
+    board[3][4] = { tile: null, crate: 1, frost: 0, vine: 0, chain: 0 };
+  }
+  state.board = board;
+  const spare = Math.max(0, Math.min(stage.steps - 1, Number(document.querySelector("#spare").value) || 0));
+  if (key.startsWith("win-bonus")) {
+    state.remaining = spare + 1;
+    if (key === "win-bonus-final") {
+      state.progress = { frost: 16, vine: 11 };
+      board[3][0].vine = 1;
+    } else state.progress = { "collect:amber": 9 };
+  }
+  if (key === "bonus-resume") {
+    state.remaining = spare;
+    state.status = "won";
+    state.progress[goalKey(stage.goals[0])] = stage.goals[0].amount;
+    state = winBonus(state, stage).start;
+  }
+  const save = freshSave();
+  save.tutorialSeen = true;
+  save.settings.reduceMotion = document.querySelector("#motion").checked;
+  save.settings.reduceFlash = document.querySelector("#flash").checked;
+  save.settings.music = false;
+  save.unlocked = stage.id;
+  save.activeRun = { levelId: stage.id, state };
+  writeSave(save);
+  location.assign("/");
+});
+</script>
+</html>

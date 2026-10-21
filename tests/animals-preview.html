@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>流光灯铺 · 动物棋子检查</title>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/night.css">
+<style>
+  body{padding:24px 16px}main{max-width:900px;margin:auto}h1{font-size:24px}p{color:var(--night-muted);font-size:13px}
+  .animal-samples{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.animal-samples figure{margin:0;text-align:center}.animal-samples svg{height:84px;margin:auto}.animal-samples figcaption{font-size:12px}
+  .sample-board{max-width:600px;margin:24px auto}.specimen-title{margin:20px 0 8px;font-size:14px}a{color:var(--night-gold)}
+  @media(max-width:480px){.animal-samples{gap:4px}.animal-samples svg{height:56px}.sample-board{max-width:360px}}
+</style>
+<main>
+  <h1>小动物棋子</h1>
+  <p>开发检查页：使用正式棋子模块和棋盘样式，不写入游玩存档。查看圆润头像、四种特殊标记和覆盖层。</p>
+  <div id="samples" class="animal-samples"></div>
+  <div class="sample-board"><p class="specimen-title">普通 · 横光束 · 纵光束 · 晶石 · 透镜 · 雾霜 · 藤纹 · 锁链</p><div class="board-wood"><div id="board" class="board-grid" style="--cols:8"></div></div></div>
+  <p><a href="/tests/effects-preview.html">打开固定局面，检查实际消除和余步化光</a></p>
+</main>
+<script type="module">
+  import { ANIMALS, pieceArt } from "/src/pieces.js";
+  const colors = Object.keys(ANIMALS);
+  document.querySelector("#samples").innerHTML = colors.map((color) => `<figure>${pieceArt(color)}<figcaption>${ANIMALS[color].name}</figcaption></figure>`).join("");
+  document.querySelector("#board").innerHTML = Array.from({length:8},(_,y)=>Array.from({length:8},(_,x)=>{
+    const color=colors[(x+y*2)%5], special=x===1||x===2?"beam":x===3?"bomb":x===4?"lens":null;
+    const overlay=x===5?'<span class="frost-overlay"></span>':x===6?'<span class="vine-overlay"></span>':x===7?'<span class="chain-overlay"><i></i><i></i></span>':"";
+    return `<button class="board-cell${x>=5?" swap-locked":""}" aria-label="${ANIMALS[color].name}${x>=5?"，覆盖锁定":""}"><span class="tile-body">${pieceArt(color,special,x===2?"v":"h")}</span>${overlay}</button>`;
+  }).join("")).join("");
+</script>
+</html>

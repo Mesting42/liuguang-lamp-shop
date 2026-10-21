@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>流光灯铺 · 触屏事件验证</title>
+<style>body{margin:16px;background:#101d30;color:#eeeae0;font:14px/1.6 system-ui}button{min-height:44px;margin:4px;padding:8px 12px;font:inherit}iframe{display:block;width:390px;max-width:100%;height:680px;border:0}output{display:block;white-space:pre-wrap;margin:12px 0}p{max-width:65ch}</style>
+<h1>触屏事件验证</h1>
+<p>独立开发端口专用。把合成 touch 指针事件交给正式游戏的输入处理器，不等于真实手机硬件验证。每项先重新准备测试局面，不使用正式端口存档。</p>
+<button data-check="tap">触屏点按交换</button>
+<button data-check="swipe">同格内短划交换</button>
+<button data-check="cancel">取消手势不交换</button>
+<button data-check="other-pointer">第二指针不抢操作</button>
+<button data-check="locked">覆盖棋子不交换</button>
+<output id="result" role="status">选择一项检查。</output>
+<iframe id="game" title="正式游戏输入验证"></iframe>
+<script type="module">
+import { LEVELS, COLORS } from "/src/levels.js";
+import { createRun } from "/src/engine.js";
+import { freshSave, writeSave } from "/src/save.js";
+const iframe=document.querySelector("#game"), result=document.querySelector("#result");
+const buttons=[...document.querySelectorAll("[data-check]")];
+function prepare(){
+  const state=createRun(LEVELS[35],5150);
+  state.board=Array.from({length:8},(_,y)=>Array.from({length:8},(_,x)=>({tile:{color:COLORS[(x+y*2)%5],special:null,direction:null},crate:0,frost:0,vine:0,chain:0})));
+  state.board[2][2].tile.color="amber";
+  ["amber","amber","coral","jade"].forEach((color,x)=>state.board[3][x].tile.color=color);
+  state.board[3][0].vine=1;
+  const save=freshSave();save.unlocked=36;save.tutorialSeen=true;save.settings.music=false;save.settings.reduceMotion=true;
+  save.activeRun={levelId:36,state};writeSave(save);
+}
+const cell=(key)=>iframe.contentDocument.querySelector(`[data-cell="${key}"]`);
+function pointer(element,type,x,y,id=7,primary=true){element.dispatchEvent(new iframe.contentWindow.PointerEvent(type,{bubbles:true,pointerId:id,pointerType:"touch",isPrimary:primary,button:0,clientX:x,clientY:y}));}
+function center(element){const r=element.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,size:r.width};}
+function tap(key){const element=cell(key),p=center(element);pointer(element,"pointerdown",p.x,p.y);pointer(element,"pointerup",p.x,p.y);element.click();}
+async function check(kind){
+  buttons.forEach(button=>button.disabled=true);delete result.dataset.passed;result.textContent="正在准备正式游戏局面…";prepare();
+  await new Promise(resolve=>{iframe.onload=resolve;iframe.src="/";});
+  iframe.contentDocument.querySelector('[data-action="begin-story"]').click();
+  const before=Number(iframe.contentDocument.querySelector(".steps-box strong").textContent);
+  const origin=cell(kind==="locked"?"3,0":"2,2"),p=center(origin),end=p.y+p.size*.36;
+  if(kind==="tap"){tap("2,2");tap("3,2");}
+  else if(kind==="locked"){pointer(origin,"pointerdown",p.x,p.y);pointer(origin,"pointerup",p.x,end);}
+  else if(kind==="cancel"){pointer(origin,"pointerdown",p.x,p.y);pointer(origin,"pointercancel",p.x,p.y);pointer(origin,"pointerup",p.x,end);}
+  else if(kind==="other-pointer"){pointer(origin,"pointerdown",p.x,p.y);pointer(origin,"pointerdown",p.x,p.y,8,false);pointer(origin,"pointerup",p.x,end,8,false);pointer(origin,"pointercancel",p.x,p.y);}
+  else{pointer(origin,"pointerdown",p.x,p.y);pointer(origin,"pointerup",p.x,end);}
+  const started=performance.now();
+  await new Promise((resolve,reject)=>{const poll=()=>{const busy=iframe.contentDocument.querySelector(".board-grid")?.getAttribute("aria-busy")==="true";if(!busy)return resolve();if(performance.now()-started>10000)return reject(new Error("结算超时"));requestAnimationFrame(poll);};poll();});
+  const after=Number(iframe.contentDocument.querySelector(".steps-box strong").textContent);
+  const shouldMove=kind==="tap"||kind==="swipe",pass=after===before-(shouldMove?1:0);
+  result.textContent=(pass?"通过":"失败")+" · "+kind+" · 步数 "+before+" → "+after+" · 同格短划距离 "+(p.size*.36).toFixed(1)+"px";
+  result.dataset.passed=String(pass);buttons.forEach(button=>button.disabled=false);
+}
+buttons.forEach(button=>button.addEventListener("click",()=>check(button.dataset.check).catch(error=>{result.textContent="失败 · "+error.message;result.dataset.passed="false";buttons.forEach(button=>button.disabled=false);})))
+</script>
+</html>

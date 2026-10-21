@@ -1,0 +1,13 @@
+{
+  "name": "liuguang-lamp-shop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A handcrafted browser match-three game about restoring an old street glass workshop.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs --production",
+    "build": "node scripts/build.mjs",
+    "test": "node tests/game.test.mjs && node tests/effects.test.mjs && node tests/pieces.test.mjs && node tests/layout.test.mjs"
+  }
+}

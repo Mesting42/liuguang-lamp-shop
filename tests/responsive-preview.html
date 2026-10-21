@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>流光灯铺 · 三端验证入口</title>
+<style>body{margin:24px auto;padding:0 20px;max-width:700px;background:#101d30;color:#eeeae0;font:16px/1.7 system-ui}button,select{min-height:44px;margin:6px;padding:8px 12px;font:inherit}a{color:#e7c48c}p{font-size:14px}</style>
+<h1>三端验证入口</h1>
+<p>仅供独立开发端口使用。准备当前端口的测试存档并打开正式游戏；不会进入生产构建。</p>
+<label>关卡 <select id="stage"></select></label>
+<button id="open">打开所选关卡</button>
+<button id="failure">最后一步失败局面</button>
+<p>失败局面：第 3 行第 3 列换到第 4 行第 3 列。</p>
+<p><a href="/tests/effects-preview.html">固定消除与奖励局面</a> · <a href="/tests/touch-preview.html">触屏事件检查</a></p>
+<script type="module">
+import { LEVELS, COLORS } from "/src/levels.js";
+import { createRun } from "/src/engine.js";
+import { freshSave, writeSave } from "/src/save.js";
+const stage=document.querySelector("#stage");
+stage.innerHTML=LEVELS.map(level=>`<option value="${level.id}">第 ${level.id} 关 · ${level.name}</option>`).join("");
+function open(failure=false){
+  const level=LEVELS[(failure?36:Number(stage.value))-1], state=createRun(level,5150);
+  if(failure){
+    state.board=Array.from({length:8},(_,y)=>Array.from({length:8},(_,x)=>({tile:{color:COLORS[(x+y*2)%5],special:null,direction:null},crate:0,frost:0,vine:0,chain:0})));
+    state.board[2][2].tile.color="amber";
+    ["amber","amber","coral","jade"].forEach((color,x)=>state.board[3][x].tile.color=color);
+    state.board[7][7].frost=1;state.board[7][7].vine=1;
+    state.remaining=1;
+  }
+  const save=freshSave();save.unlocked=36;save.tutorialSeen=true;save.settings.music=false;
+  save.activeRun={levelId:level.id,state};writeSave(save);location.assign("/");
+}
+document.querySelector("#open").addEventListener("click",()=>open());
+document.querySelector("#failure").addEventListener("click",()=>open(true));
+</script>
+</html>

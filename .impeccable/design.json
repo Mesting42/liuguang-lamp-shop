@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-18T12:28:54Z",
+  "title": "Design System: 流光灯铺",
+  "extensions": {
+    "responsivePlay": {
+      "recommendedPhoneOrientation": "portrait",
+      "landscape": "Board left; compact status right; current score stays visible; orientation never starts a new run.",
+      "boardSizingSource": "src/layout.js measures actual status, actions, captions, safe-area padding and visible viewport; sets --board-size.",
+      "compactControls": "Minimum 44px common-control height at widths up to 1100px or with a coarse pointer.",
+      "compactContent": "Hide secondary piece legend and repeated captions; preserve goals, moves, current score, three-star score and actions.",
+      "touchSource": "src/input.js uses dominant-direction swipes, tremor tolerance, adjacent-cell bounds, pointer cancellation and primary-pointer ownership.",
+      "effectResize": "Rebase active-frame geometry while retaining elapsed animation time and paused state.",
+      "evidence": "docs/RESPONSIVE_TEST_REPORT.md and docs/testing/; actual browser viewport checks, not physical iOS or Android certification."
+    },
+    "colorMeta": {
+      "canvas": {
+        "role": "neutral",
+        "canonical": "#101d30",
+        "displayName": "canvas"
+      },
+      "deep": {
+        "role": "neutral",
+        "canonical": "#0c1727",
+        "displayName": "deep"
+      },
+      "surface": {
+        "role": "neutral",
+        "canonical": "#192c42",
+        "displayName": "surface"
+      },
+      "raised": {
+        "role": "neutral",
+        "canonical": "#22394f",
+        "displayName": "raised"
+      },
+      "line": {
+        "role": "neutral",
+        "canonical": "#40576c",
+        "displayName": "line"
+      },
+      "text": {
+        "role": "neutral",
+        "canonical": "#eeeae0",
+        "displayName": "text"
+      },
+      "muted": {
+        "role": "neutral",
+        "canonical": "#b3c0cd",
+        "displayName": "muted"
+      },
+      "gold": {
+        "role": "primary",
+        "canonical": "#e7c48c",
+        "displayName": "gold"
+      },
+      "gold-hover": {
+        "role": "primary",
+        "canonical": "#f2d5a7",
+        "displayName": "gold-hover"
+      },
+      "brass": {
+        "role": "neutral",
+        "canonical": "#a98a60",
+        "displayName": "brass"
+      },
+      "success": {
+        "role": "success",
+        "canonical": "#b5d2b7",
+        "displayName": "success"
+      },
+      "danger": {
+        "role": "error",
+        "canonical": "#efb0a5",
+        "displayName": "danger"
+      },
+      "on-gold": {
+        "role": "neutral",
+        "canonical": "#15253a",
+        "displayName": "on-gold"
+      },
+      "line-strong": {
+        "role": "neutral",
+        "canonical": "#75889a",
+        "displayName": "line-strong"
+      },
+      "danger-surface": {
+        "role": "error",
+        "canonical": "#704345",
+        "displayName": "danger-surface"
+      },
+      "danger-hover": {
+        "role": "error",
+        "canonical": "#895053",
+        "displayName": "danger-hover"
+      },
+      "map-pine": {
+        "role": "neutral",
+        "canonical": "#29464b",
+        "displayName": "map-pine"
+      },
+      "map-blue": {
+        "role": "neutral",
+        "canonical": "#263e59",
+        "displayName": "map-blue"
+      },
+      "map-plum": {
+        "role": "neutral",
+        "canonical": "#3a344b",
+        "displayName": "map-plum"
+      },
+      "bonus-surface": {
+        "role": "neutral",
+        "canonical": "#4f4636",
+        "displayName": "bonus-surface"
+      }
+    },
+    "backgrounds": [
+      {
+        "name": "window-light",
+        "value": "rgba(176, 120, 48, .12)",
+        "purpose": "Warm field at the lower right of the page."
+      },
+      {
+        "name": "moonlight",
+        "value": "rgba(71, 114, 157, .22)",
+        "purpose": "Cool field at upper left."
+      },
+      {
+        "name": "window-display",
+        "value": "rgba(218, 170, 93, .15)",
+        "purpose": "Soft color field behind the existing window SVG."
+      },
+      {
+        "name": "lamp-light",
+        "value": "rgba(225, 172, 81, .24)",
+        "purpose": "Existing chapter-map lamp."
+      },
+      {
+        "name": "ending-light",
+        "value": "rgba(226, 179, 94, .2)",
+        "purpose": "Existing ending-window glow."
+      },
+      {
+        "name": "topbar",
+        "value": "rgba(12, 23, 39, .84)",
+        "purpose": "Dark navigation background."
+      },
+      {
+        "name": "divider",
+        "value": "rgba(187, 170, 136, .23)",
+        "purpose": "Topbar decorative rule."
+      },
+      {
+        "name": "shade",
+        "value": "rgba(5, 12, 23, .76)",
+        "purpose": "Modal backdrop."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "surface",
+        "value": "0 18px 48px rgba(3,10,20,.3)",
+        "purpose": "Theme surfaces only; board uses its original shadow."
+      },
+      {
+        "name": "dialog",
+        "value": "0 18px 55px rgba(2,7,14,.48)",
+        "purpose": "Modal separation"
+      }
+    ],
+    "motion": [
+      {
+        "name": "background",
+        "value": "static",
+        "purpose": "Six static points; no new animation added"
+      }
+    ],
+    "animalPieces": {
+      "canonicalSource": "src/pieces.js",
+      "stableKeysAreSaveIdentifiers": true,
+      "artwork": {
+        "format": "Authored inline SVG; no generated images, remote assets or bitmap dependencies.",
+        "viewBox": "0 0 72 72",
+        "outlineWidth": 2.2,
+        "sharedFeatures": [
+          "Round cute faces",
+          "Warm clean outlines",
+          "Small glossy eyes",
+          "Pale muzzles or face areas",
+          "Soft cheeks"
+        ],
+        "identityRule": "Silhouette, facial features and color work together to distinguish the five animals."
+      },
+      "definitions": {
+        "amber": {
+          "species": "cat",
+          "name": "猫咪",
+          "silhouette": "Round face with triangular ears, forehead stripes and whiskers.",
+          "palette": {
+            "fur": "#f4c66f",
+            "edge": "#90633d",
+            "shade": "#db9c4c",
+            "cream": "#fff0d0",
+            "inner": "#e99b87",
+            "ink": "#573c36",
+            "cheek": "#e99a87",
+            "light": "#f3cf83"
+          }
+        },
+        "jade": {
+          "species": "rabbit",
+          "name": "兔子",
+          "silhouette": "Round face with tall unequal ears and small front teeth.",
+          "palette": {
+            "fur": "#b4dbc5",
+            "edge": "#4d7d70",
+            "shade": "#86b9a5",
+            "cream": "#f3f6df",
+            "inner": "#eac1b3",
+            "ink": "#314e48",
+            "cheek": "#e1aaa2",
+            "light": "#aedec8"
+          }
+        },
+        "coral": {
+          "species": "fox",
+          "name": "狐狸",
+          "silhouette": "Pointed ears and cheek tufts around a tapered cream muzzle.",
+          "palette": {
+            "fur": "#ed9e78",
+            "edge": "#a5644c",
+            "shade": "#db7e5e",
+            "cream": "#fff0d6",
+            "inner": "#985d53",
+            "ink": "#5a3b35",
+            "cheek": "#e77d76",
+            "light": "#f0af91"
+          }
+        },
+        "azure": {
+          "species": "penguin",
+          "name": "企鹅",
+          "silhouette": "Egg-shaped head with a small top tuft, side flippers, cream face mask and triangular beak.",
+          "palette": {
+            "fur": "#9fcadd",
+            "edge": "#4f7892",
+            "shade": "#7cacc5",
+            "cream": "#f3f5e8",
+            "inner": "#f4bd68",
+            "ink": "#304b60",
+            "cheek": "#e7b0a5",
+            "light": "#aed9ef"
+          }
+        },
+        "plum": {
+          "species": "bear",
+          "name": "小熊",
+          "silhouette": "Broad round face with circular ears and an oval cream muzzle.",
+          "palette": {
+            "fur": "#c3aed7",
+            "edge": "#7c6493",
+            "shade": "#a58bbd",
+            "cream": "#f4e7dc",
+            "inner": "#dfbcce",
+            "ink": "#4f3c5d",
+            "cheek": "#dba7b8",
+            "light": "#d2bce3"
+          }
+        }
+      },
+      "specialMarkers": {
+        "faceRule": "Preserve the animal face; attach a readable type or direction marker.",
+        "shadow": "drop-shadow(0 1px 1px rgba(47,28,31,.28))",
+        "beam": {
+          "name": "光束玻璃",
+          "shape": "Rounded gold ribbon with a double-ended direction arrow.",
+          "horizontal": "Below the face; clears the row.",
+          "vertical": "At the right of the face; clears the column.",
+          "palette": {
+            "fill": "#fff0bb",
+            "edge": "#a9763f",
+            "arrow": "#896036"
+          }
+        },
+        "bomb": {
+          "name": "灯芯晶石",
+          "shape": "Round gold medallion with a five-point star at the lower right.",
+          "meaning": "Lamp crystal; clears the surrounding nine cells.",
+          "palette": {
+            "fill": "#ffe3a1",
+            "edge": "#a9763f",
+            "star": "#b17b3e",
+            "starEdge": "#fff7dc"
+          }
+        },
+        "lens": {
+          "name": "虹彩透镜",
+          "shape": "Four-color diamond medallion with a pale central glint at the lower right.",
+          "meaning": "Rainbow lens; collects pieces of the same kind.",
+          "palette": {
+            "base": "#f5e9d5",
+            "edge": "#8b748d",
+            "facets": ["#b8dce3", "#dbc0df", "#f3c0a8", "#f2d58e"],
+            "glint": "#fffaf0"
+          }
+        }
+      },
+      "integration": {
+        "sharedArtwork": ["Board", "Collection goals", "Legend", "Tutorial", "Ending display"],
+        "sharedNames": "src/main.js uses animalName() and ANIMALS for collection labels, legend and board accessibility labels.",
+        "effectLight": "src/effects.js derives each stable key's matching light from ANIMALS[key].light.",
+        "overlays": "Existing frost, vine and chain layering and exchange-blocking rules remain in place.",
+        "stylingBoundary": "Keep SVG-local fills and strokes; the removed broad piece-fill and piece-edge recoloring rules must not override animal artwork."
+      }
+    },
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "720px"
+      },
+      {
+        "name": "tablet",
+        "value": "1000px"
+      },
+      {
+        "name": "phone-landscape",
+        "value": "orientation: landscape; max-height: 540px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "主操作",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Warm gold foreground action.",
+      "html": "<button class=\"ds-primary\">继续修复</button>",
+      "css": ".ds-primary{padding:14px 24px;border:0;border-radius:6px;background:#e7c48c;color:#15253a;font:600 14px system-ui;cursor:pointer}.ds-primary:hover{background:#f2d5a7}.ds-primary:focus-visible{outline:3px solid #f2d5a7;outline-offset:3px}"
+    },
+    {
+      "name": "次操作",
+      "kind": "button",
+      "description": "Blue surface with brass border.",
+      "html": "<button class=\"ds-secondary\">返回地图</button>",
+      "css": ".ds-secondary{padding:13px 23px;border:1px solid #a98a60;border-radius:6px;background:#192c42;color:#e7c48c;font:600 14px system-ui;cursor:pointer}.ds-secondary:hover{background:#22394f;color:#f2d5a7}.ds-secondary:focus-visible{outline:3px solid #f2d5a7;outline-offset:3px}"
+    },
+    {
+      "name": "设置选项",
+      "kind": "input",
+      "description": "Native labeled checkbox in the night palette.",
+      "html": "<label class=\"ds-option\"><input type=\"checkbox\" checked> 简化动画</label>",
+      "css": ".ds-option{display:inline-flex;gap:8px;align-items:center;padding:14px;background:#192c42;color:#b3c0cd;font:14px system-ui}.ds-option input{width:18px;height:18px;accent-color:#e7c48c}.ds-option input:focus-visible{outline:3px solid #f2d5a7;outline-offset:3px}"
+    },
+    {
+      "name": "章节导航",
+      "kind": "nav",
+      "description": "Active chapter uses gold with its underline.",
+      "html": "<nav class=\"ds-nav\"><button aria-current=\"page\">河街灯铺</button><button>旧站候车厅</button></nav>",
+      "css": ".ds-nav{display:flex;gap:8px;background:#101d30;font:14px system-ui}.ds-nav button{padding:12px;border:0;border-bottom:2px solid transparent;background:none;color:#b3c0cd;cursor:pointer}.ds-nav button[aria-current]{color:#e7c48c;border-bottom-color:#e7c48c}.ds-nav button:hover{background:#22394f}.ds-nav button:focus-visible{outline:3px solid #f2d5a7}"
+    },
+    {
+      "name": "修复装饰",
+      "kind": "chip",
+      "description": "A collected decoration label.",
+      "html": "<span class=\"ds-decoration\">雨滴小穗</span>",
+      "css": ".ds-decoration{display:inline-block;padding:5px 8px;border:1px solid #40576c;background:#22394f;color:#e7c48c;font:12px system-ui}"
+    }
+  ],
+  "narrative": {
+    "northStar": "夜街与窗光",
+    "overview": "The page theme is a quiet night outside a lit workshop: navy backgrounds, cool blue surfaces, soft pale text, and honey-gold primary actions. The original color and background refinement preserved the page and board layouts. A later explicit user request replaced the five glass-piece illustrations with round cartoon cat, rabbit, fox, penguin and bear faces. No generated imagery is used.\n\n`night.css` is the normative page-theme layer; `styles.css` owns layout, board and animations. `src/pieces.js` is the canonical source for authored inline animal SVGs, Chinese names and animal palettes. The workshop's glass windows and story remain part of the setting.",
+    "keyCharacteristics": [
+      "Deep blue canvas",
+      "Warm gold actions",
+      "Moonlit utility text",
+      "Round animal faces distinct by silhouette, features and color"
+    ],
+    "rules": [
+      {
+        "name": "The Board Boundary Rule",
+        "body": "Page-theme rules in `night.css` must not override board, piece, obstacle or effect selectors. The explicit animal replacement belongs to the piece source and its narrow styling.",
+        "section": "colors"
+      },
+      {
+        "name": "The Text Hierarchy Rule",
+        "body": "Use warm off-white headings, blue-tinted utility text, and gold actions and score.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do keep the foreground readable on every surface, including settings and chapter tabs.",
+      "Do use CSS for the page background and local authored vector artwork.",
+      "Do keep animal silhouettes, facial features and special direction/type marks distinct at small piece sizes.",
+      "Do keep the shared animal definitions and stable saved piece keys aligned across artwork, goals, legend, tutorial, accessibility labels and effect light colors.",
+      "Do keep motion preferences, focus behavior, target information and responsive play intact."
+    ],
+    "donts": [
+      "Don't introduce generated illustrations, raster mockups, remote assets or decorative English headings.",
+      "Don't restyle the board, replace its pieces, rewrite gameplay or rearrange page layouts as part of a palette-only theme change. The later explicit animal-piece request authorizes the documented artwork replacement within its narrow scope.",
+      "Don't apply broad SVG recoloring that overrides the animal faces or hides their special markers."
+    ]
+  }
+}

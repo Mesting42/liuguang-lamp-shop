@@ -1,0 +1,27 @@
+# Generated build output and installed dependencies
+/dist/
+/node_modules/
+
+# Local previews, screenshots, caches, and tooling scratch files
+/.tmp/
+/.cache/
+/.npm/
+/.vscode/
+/.idea/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+
+# Logs and operating system files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+Desktop.ini

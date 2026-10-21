@@ -1,0 +1,18 @@
+{
+  "name": "流光灯铺 · 老街修复手记",
+  "short_name": "流光灯铺",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#101d30",
+  "theme_color": "#101d30",
+  "icons": [
+    {
+      "src": "/assets/brand-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
