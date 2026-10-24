@@ -66,3 +66,14 @@
 `src/input.js` 允许向相邻方向短划，不必准确滑过格子边界；取消指针和第二根手指不会错误触发交换。新手提示可从手机菜单的“操作提示”重新打开。
 
 实际浏览器验证记录及截图见 [三端适配测试报告](docs/RESPONSIVE_TEST_REPORT.md)。独立开发端口的 `/tests/responsive-preview.html` 可选择 36 关和失败局面，`/tests/touch-preview.html` 可将合成触屏指针事件交给正式游戏处理器；两页均不进入生产构建。请使用独立端口 4176，避免覆盖正式端口的游玩存档。
+
+<!-- pixel-pier-game-listing:start -->
+## Game listing / 游戏展示
+
+- **Game developer / 游戏开发者:** Mest ([@Mesting42](https://github.com/Mesting42))
+- **Pixel Pier listing / 游戏展示页面:** [Liuguang Lamp Shop](https://riverglint.link/games/liuguang-lamp-shop/)
+
+This game is listed on Pixel Pier with a play entry and game guide. This link identifies a game-development and listing relationship; it does not identify the developer as the website operator or operating entity.
+
+本游戏在 Pixel Pier 展示，并提供游玩入口与游戏指南。此链接仅表示游戏开发与展示关联，不代表开发者是该网站的运营者或运营主体。
+<!-- pixel-pier-game-listing:end -->
